@@ -1,8 +1,8 @@
 <?php // Example 27-1: functions.php
   $dbhost  = 'localhost';    // Unlikely to require changing
-  $dbname  = 'robinsnest';   // Modify these...
-  $dbuser  = 'robinsnest';   // ...variables according
-  $dbpass  = 'rnpassword';   // ...to your installation
+  $dbname  = 'dev640app';   // Modify these...
+  $dbuser  = 'root';   // ...variables according
+  $dbpass  = 'mysql';   // ...to your installation
 
   $connection = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
   if ($connection->connect_error) die("Fatal Error");
