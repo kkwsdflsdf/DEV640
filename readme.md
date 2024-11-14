@@ -1,3 +1,6 @@
+# How To Run
+### New mysql db
+```
 CREATE DATABASE dev640app;
 USE dev640app;
 
@@ -30,3 +33,14 @@ CREATE TABLE profiles (
     text VARCHAR(4096),
     INDEX(user(6))
 );
+```
+### Enable GD
+Open your ``\Ampps\php\php.ini``
+Find this:
+```
+;extension=gd
+```
+Delete the ``;``, making it:
+```
+extension=gd
+```
