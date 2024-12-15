@@ -54,4 +54,25 @@
     }
     else echo "<p>Nothing to see here, yet</p><br>";
   }
+
+  function showFriendMessages($user, $friend)
+{
+  $result = queryMysql("SELECT * FROM messages WHERE auth='$friend' AND recip='$user' ORDER BY time DESC");
+
+  if ($result->num_rows)
+  {
+    while ($row = $result->fetch_array(MYSQLI_ASSOC))
+    {
+      $auth = htmlspecialchars($row['auth']);
+      $time = htmlspecialchars($row['time']);
+      $message = htmlspecialchars($row['message']);
+
+      echo "<div><strong>$auth</strong> at $time<br>$message<br><br></div>";
+    }
+  }
+  else
+  {
+    echo "<p>No messages from $friend.</p>";
+  }
+}
 ?>
