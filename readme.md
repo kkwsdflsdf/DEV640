@@ -1,5 +1,7 @@
 # How To Run
+
 ### New mysql db
+
 ```
 CREATE DATABASE dev640app;
 USE dev640app;
@@ -34,20 +36,36 @@ CREATE TABLE profiles (
     INDEX(user(6))
 );
 ```
+
 ### Enable GD
-Open your ``\Ampps\php\php.ini``
+
+Open your `\Ampps\php\php.ini`
 Find this:
+
 ```
 ;extension=gd
 ```
-Delete the ``;``, making it:
+
+Delete the `;`, making it:
+
 ```
 extension=gd
 ```
 
 # update 1
+
 Add following to database:
+
 ```
 ALTER TABLE profiles ADD location VARCHAR(255);
 ALTER TABLE profiles ADD interests VARCHAR(255);
+```
+
+# update 2 - like/dislike function
+
+Add following to database:
+
+```
+ALTER TABLE messages ADD likes INT DEFAULT 0;
+ALTER TABLE messages ADD dislikes INT DEFAULT 0;
 ```
