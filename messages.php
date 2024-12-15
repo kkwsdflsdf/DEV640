@@ -98,12 +98,12 @@ _END;
           echo "whispered: <span class='whisper'>&quot;" .
             $row['message']. "&quot;</span> ";
 
-            echo "<br><input type='image' name='like' src='arrow-u-black.png' alt='Like' style='width: 30px; height: 30px;'>" . $row['likes'] . " <input type='image' name='dislike' src='arrow-d-black.png' alt='Dislike' style='width: 30px; height: 30px;'> " . $row['dislikes'];
             echo "<form method='post' action='messages.php?view=$view' class='like-dislike-buttons'>
-                    <input type='hidden' name='messageId' value='" . $row['id'] . "'>
-                
-                  </form>";
-
+            <input type='hidden' name='messageId' value='" . $row['id'] . "'>
+            <input type='image' name='like' src='arrow-u-black.png' alt='Like' style='width: 20px; height: 25px;'>" . $row['likes'] . "
+             <input type='image' name='dislike' src='arrow-d-black.png' alt='Dislike' style='width: 20px; height: 25px;'>" . $row['dislikes'] . "
+          </form>";
+    
         if ($row['recip'] == $user)
           echo "[<a href='messages.php?view=$view" .
                "&erase=" . $row['id'] . "'>erase</a>]";
