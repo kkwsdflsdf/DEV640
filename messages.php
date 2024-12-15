@@ -1,21 +1,35 @@
 <?php // Example 27-11: messages.php
   require_once 'header.php';
-  
+  require_once 'functions.php';
+
   if (!$loggedin) die("</div></body></html>");
 
   if (isset($_GET['view'])) $view = sanitizeString($_GET['view']);
   else                      $view = $user;
 
-  if (isset($_POST['text']))
+  $error = "";
+
+  if (isset($_POST['text']) && isset($_POST['pm']))
   {
     $text = sanitizeString($_POST['text']);
+    $pm = sanitizeString($_POST['pm']);
 
-    if ($text != "")
-    {
-      $pm   = substr(sanitizeString($_POST['pm']),0,1);
-      $time = time();
-      queryMysql("INSERT INTO messages VALUES(NULL, '$user',
-        '$view', '$pm', $time, '$text')");
+    if (!isMessageValid($text, 10)) {
+        $error = "<span class='error'>&nbsp;&#x2718; The message must be more than 10 characters long</span>";
+    } else {
+        $pm   = substr(sanitizeString($_POST['pm']),0,1);
+        $time = time();
+        queryMysql("INSERT INTO messages VALUES(NULL, '$user', '$view', '$pm', $time, '$text', 0, 0)");
+        $error = "<span class='success'>&nbsp;&#x2714; Message posted successfully</span>";
+    }
+  }
+
+  if (isset($_POST['like']) || isset($_POST['dislike'])) {
+    $messageId = sanitizeString($_POST['messageId']);
+    if (isset($_POST['like'])) {
+        queryMysql("UPDATE messages SET likes = likes + 1 WHERE id = $messageId");
+    } else if (isset($_POST['dislike'])) {
+        queryMysql("UPDATE messages SET dislikes = dislikes + 1 WHERE id = $messageId");
     }
   }
 
@@ -32,7 +46,7 @@
     showProfile($view);
     
     echo <<<_END
-      <form method='post' action='messages.php?view=$view'>
+      <form method='post' action='messages.php?view=$view' onsubmit='return validateMessage()'>
         <fieldset data-role="controlgroup" data-type="horizontal">
           <legend>Type here to leave a message</legend>
           <input type='radio' name='pm' id='public' value='0' checked='checked'>
@@ -40,9 +54,20 @@
           <input type='radio' name='pm' id='private' value='1'>
           <label for="private">Private</label>
         </fieldset>
-      <textarea name='text'></textarea>
-      <input data-transition='slide' type='submit' value='Post Message'>
-    </form><br>
+        <textarea name='text' id='text'></textarea>
+        <input data-transition='slide' type='submit' value='Post Message'>
+      </form><br>
+      $error
+      <script>
+        function validateMessage() {
+          var text = document.getElementById('text').value;
+          if (text.length <= 10) {
+            alert('The message must be more than 10 characters long');
+            return false;
+          }
+          return true;
+        }
+      </script>
 _END;
 
     date_default_timezone_set('UTC');
@@ -73,6 +98,12 @@ _END;
           echo "whispered: <span class='whisper'>&quot;" .
             $row['message']. "&quot;</span> ";
 
+            echo "<br><input type='image' name='like' src='arrow-u-black.png' alt='Like' style='width: 30px; height: 30px;'>" . $row['likes'] . " <input type='image' name='dislike' src='arrow-d-black.png' alt='Dislike' style='width: 30px; height: 30px;'> " . $row['dislikes'];
+            echo "<form method='post' action='messages.php?view=$view' class='like-dislike-buttons'>
+                    <input type='hidden' name='messageId' value='" . $row['id'] . "'>
+                
+                  </form>";
+
         if ($row['recip'] == $user)
           echo "[<a href='messages.php?view=$view" .
                "&erase=" . $row['id'] . "'>erase</a>]";
@@ -88,6 +119,60 @@ _END;
   echo "<br><a data-role='button'
         href='messages.php?view=$view'>Refresh messages</a>";
 ?>
+
+<?php
+function isMessageValid($message, $minLength)
+{
+    return strlen($message) > $minLength;
+}
+?>
+
+<style>
+form {
+    margin: 20px 0;
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 10px;
+}
+
+input[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+}
+
+.success {
+    color: green;
+    font-weight: bold;
+}
+
+.like-dislike-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.like-dislike-buttons input[type="image"] {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+</style>
 
     </div><br>
   </body>
