@@ -5,16 +5,35 @@
 
   echo "<h3>Your Profile</h3>";
 
+  // 获取已有资料
   $result = queryMysql("SELECT * FROM profiles WHERE user='$user'");
-    
+  if ($result->num_rows)
+  {
+      $row = $result->fetch_array(MYSQLI_ASSOC);
+      $text = stripslashes($row['text']);
+      $location = stripslashes($row['location']);
+      $interests = stripslashes($row['interests']);
+  }
+  else 
+  {
+      $text = "";
+      $location = "";
+      $interests = "";
+  }
+
+  // 如果表单提交了新资料
   if (isset($_POST['text']))
   {
-    $text = sanitizeString($_POST['text']);
-    $text = preg_replace('/\s\s+/', ' ', $text);
+      $text = sanitizeString($_POST['text']);
+      $text = preg_replace('/\s\s+/', ' ', $text);
 
-    if ($result->num_rows)
-         queryMysql("UPDATE profiles SET text='$text' where user='$user'");
-    else queryMysql("INSERT INTO profiles VALUES('$user', '$text')");
+      // 同时获取新提交的 location 和 interests
+      $location = sanitizeString($_POST['location']);
+      $interests = sanitizeString($_POST['interests']);
+
+      if ($result->num_rows)
+           queryMysql("UPDATE profiles SET text='$text', location='$location', interests='$interests' WHERE user='$user'");
+      else queryMysql("INSERT INTO profiles (user, text, location, interests) VALUES('$user', '$text', '$location', '$interests')");
   }
   else
   {
@@ -79,16 +98,14 @@
   showProfile($user);
 
 echo <<<_END
-      <form data-ajax='false' method='post'
-        action='profile.php' enctype='multipart/form-data'>
-      <h3>Enter or edit your details and/or upload an image</h3>
-      <textarea name='text'>$text</textarea><br>
-      Image: <input type='file' name='image' size='14'>
-      <input type='submit' value='Save Profile'>
-      </form>
-    </div><br>
-  </body>
-</html>
+<form data-ajax='false' method='post' action='profile.php' enctype='multipart/form-data'>
+  <h3>Enter or edit your details and/or upload an image</h3>
+  <textarea name='text'>$text</textarea><br>
+  Location: <input type='text' name='location' value='$location'><br>
+  Interests: <input type='text' name='interests' value='$interests'><br><br>
+  Image: <input type='file' name='image' size='14'><br><br>
+  <input type='submit' value='Save Profile'>
+</form>
 _END;
 ?>
 

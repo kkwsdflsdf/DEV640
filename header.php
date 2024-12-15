@@ -50,6 +50,8 @@ echo <<<_LOGGEDIN
             data-transition="slide" href='members.php'>Members</a>
           <a data-role='button' data-inline='true' data-icon='heart'
             data-transition="slide" href='friends.php'>Friends</a><br>
+          <a data-role='button' data-inline='true' data-icon='search' 
+            data-transition="slide" href='search.php'>Search</a><br>
           <a data-role='button' data-inline='true' data-icon='mail'
             data-transition="slide" href='messages.php'>Messages</a>
           <a data-role='button' data-inline='true' data-icon='edit'

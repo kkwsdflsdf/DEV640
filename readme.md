@@ -44,3 +44,10 @@ Delete the ``;``, making it:
 ```
 extension=gd
 ```
+
+# update 1
+Add following to database:
+```
+ALTER TABLE profiles ADD location VARCHAR(255);
+ALTER TABLE profiles ADD interests VARCHAR(255);
+```
