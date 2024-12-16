@@ -3,6 +3,23 @@
 
   if (!$loggedin) die("</div></body></html>");
 
+  if (isset($_GET['add']))
+{
+  $add = sanitizeString($_GET['add']);
+  $user = $_SESSION['user']; // Assuming $user is the logged-in user
+
+  // Insert the follow relationship into the database
+  $result = queryMysql("SELECT * FROM friends WHERE user='$add' AND friend='$user'");
+  if (!$result->num_rows)
+  {
+    queryMysql("INSERT INTO friends (user, friend) VALUES ('$add', '$user')");
+    // Create a notification for the followed user
+    createNotification($add, 'friend', 'You have a new friend: ' . $user);
+    // Create a notification for the current user
+    createNotification($user, 'friend', 'You have a new friend: ' . $add);
+  }
+}
+
   if (isset($_GET['view'])) $view = sanitizeString($_GET['view']);
   else                      $view = $user;
 
@@ -19,7 +36,7 @@
     $name3 = "$view is";
   }
 
-  // Uncomment this line if you wish the user’s profile to show here
+  // Uncomment this line if you wish the userï¿½s profile to show here
   // showProfile($view);
 
   $followers = array();

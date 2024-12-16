@@ -4,6 +4,7 @@
   if (!$loggedin) die("</div></body></html>");
 
   echo "<h3>Your Profile</h3>";
+  showLocationAndInterests($user);
 
   // 获取已有资料
   $result = queryMysql("SELECT * FROM profiles WHERE user='$user'");
