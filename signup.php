@@ -32,6 +32,11 @@ _END;
   {
     $user = sanitizeString($_POST['user']);
     $pass = sanitizeString($_POST['pass']);
+    $location = "";
+    $interests = "";
+
+    if (isset($_POST['location']))  $location = sanitizeString($_POST['location']);
+    if (isset($_POST['interests'])) $interests = sanitizeString($_POST['interests']);
 
     if ($user == "" || $pass == "")
       $error = 'Not all fields were entered<br><br>';
@@ -57,6 +62,9 @@ _END;
       }else
       {
         queryMysql("INSERT INTO members VALUES('$user', '$pass')");
+        // Then, create the corresponding row in the profiles table, where you can insert location and interests.
+        // If you don't want to insert them immediately during registration, you can insert them into profiles only after the insertion into members is successful.
+        queryMysql("INSERT INTO profiles (user, text, location, interests) VALUES('$user', '', '$location', '$interests')");
         die('<h4>Account created</h4>Please Log in.</div></body></html>');
       }
     }
@@ -80,10 +88,23 @@ echo <<<_END
         <input type='password' maxlength='16' name='pass' value='$pass'>
         <span class='error'>$passError</span>
       </div>
+      
+      <!-- new div：Location 和 Interests -->
+      <div data-role='fieldcontain'>
+        <label>Location</label>
+        <input type='text' name='location' value=''>
+      </div>
+      <div data-role='fieldcontain'>
+        <label>Interests</label>
+        <input type='text' name='interests' value=''>
+      </div>
+
       <div data-role='fieldcontain'>
         <label></label>
         <input data-transition='slide' type='submit' value='Sign Up'>
       </div>
+
+      
     </div>
   </body>
 </html>
