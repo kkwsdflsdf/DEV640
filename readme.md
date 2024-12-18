@@ -69,3 +69,20 @@ Add following to database:
 ALTER TABLE messages ADD likes INT DEFAULT 0;
 ALTER TABLE messages ADD dislikes INT DEFAULT 0;
 ```
+
+### show profile image
+```
+ALTER TABLE profiles ADD COLUMN image VARCHAR(255);
+```
+
+### add chat option
+```
+CREATE TABLE chat (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    from VARCHAR(16),
+    to VARCHAR(16),
+    pm CHAR(1),
+    time INT UNSIGNED,
+    message TEXT
+);
+```
