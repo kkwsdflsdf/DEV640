@@ -51,3 +51,16 @@ Add following to database:
 ALTER TABLE profiles ADD location VARCHAR(255);
 ALTER TABLE profiles ADD interests VARCHAR(255);
 ```
+
+### show profile image
+ALTER TABLE profiles ADD COLUMN image VARCHAR(255);
+
+### add chat option
+CREATE TABLE chat (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    from VARCHAR(16),
+    to VARCHAR(16),
+    pm CHAR(1),
+    time INT UNSIGNED,
+    message TEXT
+);
