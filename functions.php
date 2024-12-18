@@ -76,38 +76,4 @@
   }
 }
 
-function showLocationAndInterests($user)
-{
-  $result = queryMysql("SELECT * FROM profiles WHERE user='$user'");
-
-  if ($result->num_rows)
-  {
-    $row = $result->fetch_array(MYSQLI_ASSOC);
-    echo stripslashes($row['text']) . "<br style='clear:left;'><br>";
-  }
-
-  else echo "<p>Nothing to see here, yet</p><br>";
-
-  $result = queryMysql("SELECT location, interests FROM members WHERE user='$user'");
-  if ($result->num_rows)
-  {
-    $row = $result->fetch_array(MYSQLI_ASSOC);
-    echo "Location: " . htmlspecialchars($row['location']) . "<br>";
-    echo "Interests: " . htmlspecialchars($row['interests']) . "<br>";
-  }
-}
-
-function hasNewFriendNotifications($user)
-{
-  $result = queryMysql("SELECT COUNT(*) AS count FROM notifications WHERE user='$user' AND type='friend' AND seen=FALSE");
-  $row = $result->fetch_array(MYSQLI_ASSOC);
-  return $row['count'] > 0;
-}
-
-// createNotification
-function createNotification($user, $type, $message)
-{
-  queryMysql("INSERT INTO notifications (user, type, message) VALUES ('$user', '$type', '$message')");
-}
-
 ?>
