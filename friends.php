@@ -36,8 +36,8 @@
     $name3 = "$view is";
   }
 
-  // Uncomment this line if you wish the user�s profile to show here
-  // showProfile($view);
+  // Uncomment this line if you wish the user's profile to show here
+  showProfile($view);
 
   $followers = array();
   $following = array();
